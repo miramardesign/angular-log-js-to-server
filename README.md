@@ -4,10 +4,6 @@ Log frontend js errors to server
 Sends js error messages to the server endpoint at /api/log in order to 
 debug user errors. 
 
-Gif preview:
-
-![Blow it up!](https://i.imgur.com/2uR07V7.gif)
-
 ## Installation
 
 Install with bower (or download/clone).

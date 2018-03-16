@@ -41,21 +41,29 @@ angular.module('logToServer', [])
                 /**
                  * 
                  * send messages to logApi
-                 * @param {object} body the text of the message
+                 * @param {object} message the text of the message
                  * @param {object} settings the collection of config
                  * @returns {undefined}
                  */
-                sendJsError: function (body, settings) {
+                sendJsError: function (message, settings) {
 
                     var apiLog = settings.apiUrl || '/api/log';
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", apiLog, true);
                     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                    xhr.send(JSON.stringify(body));
+                    xhr.send(JSON.stringify(message));
                 },
+                /**
+                 * 
+                 * @param {type} message
+                 * @param {type} url
+                 * @param {type} lineNumber
+                 * @returns {undefined|Boolean}
+                 */
                 onError: function (message, url, lineNumber) {
+                    
+                    //remove 2nd error
                     if (window.logToFront.hasError) {
-                        //deduplicating by checking bool - only send first error
 
                         window.setTimeout(function () {
                             window.logToFront.hasError = false;
@@ -67,7 +75,7 @@ angular.module('logToServer', [])
                     }
                     console.error('error:' + message + ' ' + url + ': ' + lineNumber);
 
-                    var body = {
+                    var messageObj = {
                         message: message,
                         type: 'js-error',
                         url: url,
@@ -75,7 +83,7 @@ angular.module('logToServer', [])
                         location: window.location.href
                     };
 
-                    logToServer.sendToLoggerApi(body);
+                    logToServer.sendToLoggerApi(messageObj);
                     return true;
                 }
             };
