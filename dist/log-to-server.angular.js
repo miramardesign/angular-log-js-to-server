@@ -47,7 +47,7 @@ angular.module('logToServer', [])
                  */
                 sendJsError: function (message, settings) {
 
-                    var apiLog = settings.apiUrl || '/api/log';
+                    var apiLog = settings.apiUrl || '/api/log-js';
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", apiLog, true);
                     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");

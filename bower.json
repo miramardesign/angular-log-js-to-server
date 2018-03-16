@@ -1,0 +1,13 @@
+{
+  "name": "frontend-logger",
+  "version": "1.0.0",
+  "main": "path/to/main.css",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "saucer-easter-egg": "^1.0.7"
+  },
+  "devDependencies": {}
+}
