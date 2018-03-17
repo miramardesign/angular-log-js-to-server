@@ -15,10 +15,9 @@ module.exports = function (app) {
 
         req.body.datetime = new Date().toString("yyyyMMddHHmmss");
 
-        var msg = util.format(req.body);
-        var commaNewline = ',\n';
+        var msg = util.format(req.body) + ',\n';
 
-        fs.appendFile('js-errors.log', msg + commaNewline, function (err) {
+        fs.appendFile('js-errors.log', msg, function (err) {
             if (err) {
                 throw err;
             }
