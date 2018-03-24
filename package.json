@@ -1,23 +1,16 @@
 {
-  "name": "frontend-logger",
-  "version": "1.0.0",
+  "name": "angular-log-js-to-server",
+  "version": "0.1.0",
   "keywords": [
-    "util",
-    "functional",
-    "server",
-    "client",
-    "browser"
+    "js",
+    "logging",
+    "angular"
   ],
-  "author": "hazz",
+  "author": "miramardesign",
   "contributors": [],
   "dependencies": {},
   "scripts": {
     "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
-  "devDependencies": {
-    "jasmine-core": "^2.2.0",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-jasmine": "^0.3.5"
-  }
+
 }
