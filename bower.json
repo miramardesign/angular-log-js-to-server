@@ -1,6 +1,6 @@
 {
   "name": "angular-log-js-to-server",
-  "version": "1.0.0",
+  "version": "0.0.01",
   "main": "dist/log-to-server.angular.js",
   "ignore": [
     ".jshintrc",
