@@ -4,94 +4,91 @@
 
 /**
  * the angular logToServer module
- * uses globals window.onerror and window.logToFront 
  * @type type
  */
 angular.module('logToServer', [])
-        /**
-         * 
-         * @param {type} $http angular ajax 
-         * @param {type} $location angular location 
-         * @param {type} settings a setting object optional if not uses url 
-         * endpoint '/api/log-js'
-         * @returns {undefined}
-         */
-        .service('$log', ['$http', '$location', 'settings',
-            function ($http, $location, settings) {
+        .service('$log', function () {
 
-                this.error = function (msg) {
+            this.error = function (msg) {
 
-                    var body = {
-                        message: msg.message,
-                        stack: msg.stack,
-                        type: 'angular-error',
-                        location: $location.absUrl()
-                    };
-                    logToServer.sendJsError(body, settings);
+                var body = {
+                    message: msg.message,
+                    stack: msg.stack,
+                    type: 'angularjs-error',
+                    location: window.location.href
                 };
-                this.warn = function (msg) {
-                    console.warn(msg);
-                };
-                /**
-                 * 
-                 * have to use global window since this is extremely low level
-                 * the common js logger which catches js errors that occur outside angularJS
-                 * @type type
-                 */
-                window.logToServer = {
-                    /**
-                     * 
-                     * send messages to logApi
-                     * @param {object} message the text of the message
-                     * @param {object} settings the collection of config
-                     * @returns {undefined}
-                     */
-                    sendJsError: function (message, settings) {
 
-                        var req = {
-                            method: 'POST',
-                            url: settings.apiUrl || '/api/log-js',
-                            headers: {
-                                'Content-Type': "application/json;charset=UTF-8"
-                            },
-                            data: JSON.stringify(message)
-                        };
+                logToServer.sendJsError(body);
+            };
 
-                        $http(req).then(function (res) {
-                            console.log('data sent to server- res:', res);
-                        });
-                    },
-                    /**
-                     * 
-                     * @param {type} message
-                     * @param {type} url
-                     * @param {type} lineNumber
-                     * @returns {undefined|Boolean}
-                     */
-                    onError: function (message, url, lineNumber) {
+            this.warn = function (msg) {
+                console.warn(msg);
+            };
 
-                        //remove 2nd error
-                        if (window.logToServer.hasError) {
 
-                            window.setTimeout(function () {
-                                window.logToServer.hasError = false;
-                            }, 2000);
-                            console.info('error hit but deduped, only showing in console.');
-                            return;
-                        } else {
-                            window.logToServer.hasError = true;
-                        }
-                        console.error('error:' + message + ' ' + url + ': ' + lineNumber);
-                        var messageObj = {
-                            message: message,
-                            type: 'js-error',
-                            url: url,
-                            lineNumber: lineNumber,
-                            location: $location.absUrl()
-                        };
-                        logToServer.sendJsError(messageObj);
-                        return true;
-                    }
-                };
-                window.onerror = logToServer.onError;
-            }]);
+        });
+/**
+ * 
+ * have to use global window since this is extremely low level
+ * the common js logger which catches js errors that occur outside angularJS
+ * @type type
+ */
+window.logToServer = {
+
+    /**
+     * global flag
+     * @type Boolean
+     */
+    hasError: false,
+    /**
+     * 
+     * send messages to logApi
+     * tried injecting $http but causes circular references
+     * @param {object} message the text of the message
+     * @param {object} settings the collection of config
+     * @returns {undefined}
+     */
+    sendJsError: function (message, settings) {
+
+        var apiLog = settings && settings.apiUrl || '/api/log-js';
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", apiLog, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify(message));
+    },
+    /**
+     * 
+     * @param {type} message
+     * @param {type} url
+     * @param {type} lineNumber
+     * @returns {undefined|Boolean}
+     */
+    onError: function (message, url, lineNumber) {
+
+        //remove 2nd error
+        if (window.logToServer.hasError) {
+
+            window.setTimeout(function () {
+                window.logToServer.hasError = false;
+            }, 2000);
+            console.info('error hit but deduped, only showing in console.');
+            return;
+        } else {
+            window.logToServer.hasError = true;
+        }
+        console.error('error:' + message + ' ' + url + ': ' + lineNumber);
+
+        var messageObj = {
+            message: message,
+            type: 'js-error',
+            url: url,
+            lineNumber: lineNumber,
+            location: window.location.href
+        };
+
+        logToServer.sendJsError(messageObj);
+        return true;
+    }
+};
+
+window.onerror = logToServer.onError;
