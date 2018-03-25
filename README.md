@@ -9,7 +9,7 @@ debug user errors.
 Install with bower (or download/clone).
 
 ```shell
-bower install log-to-server-angular --save
+bower install angular-log-js-to-server --save
 ```
 
 Import the required files to your html.
