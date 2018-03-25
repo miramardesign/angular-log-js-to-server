@@ -40,7 +40,7 @@ If you are using jQuery in your application, note that camel case attributes suc
 |Name|Type|Default|Description|
 |--- |--- |--- |--- |
 |apiUrl|string| `/api/log-js`, 
-|REQUIRED, the url end point to point to send the error report.
+| the url end point to point to send the error report.
 
 ```
 
